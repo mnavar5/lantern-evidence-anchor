@@ -1,0 +1,40 @@
+# Daily: anchor new Lantern checkpoints and upgrade pending OpenTimestamps receipts.
+# Holds no secrets. The only write permission is to this repository's contents.
+name: Anchor checkpoints
+
+on:
+  schedule:
+    - cron: '45 1 * * *'   # after Lantern's first collection of the UTC day (00:17), which makes the daily checkpoint
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: anchor
+  cancel-in-progress: false
+
+jobs:
+  anchor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13'
+      - run: pip install -r requirements.txt
+      - name: Anchor
+        id: anchor
+        run: python anchor.py
+        env:
+          LANTERN_SUPABASE_URL: ${{ vars.LANTERN_SUPABASE_URL }}
+          LANTERN_SUPABASE_KEY: ${{ vars.LANTERN_SUPABASE_KEY }}
+      - name: Commit anchors, receipts and any alert
+        if: always()
+        run: |
+          git config user.name "lantern-anchor"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add anchors
+          [ -d alerts ] && git add alerts
+          git diff --cached --quiet || { git commit -m "anchor: $(date -u +%F)"; git push; }
