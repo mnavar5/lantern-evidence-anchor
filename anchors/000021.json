@@ -1,0 +1,11 @@
+{
+  "chain_head": "565176b28c6052e87259e5727f2e33c1cc83bf9aad1c71a7d8e7d7c57672d6e8",
+  "checkpoint_hash": "77e9280f610197636c311adea97a0ee895af1fce3a83f655d3c1ada6c3b4abe5",
+  "created": "2026-10-13T06:53:49.288218+00:00",
+  "first_capture": 3564,
+  "last_capture": 3674,
+  "leaves": 111,
+  "merkle_root": "61bcb7c6c40da358d6ea7eb4576d40b52c80ad2f23d4e4d4a5e872b70b626aab",
+  "prev_checkpoint": "5cc66890d367c67a80f4ee6570a1a424b6ea40724d66843885cd7cc2618e2463",
+  "seq": 21
+}
